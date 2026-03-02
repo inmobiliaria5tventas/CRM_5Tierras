@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5TIERRAS - Portal Maestro CRM & GIS</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="brand">5TIERRAS</div>
+        <ul class="nav-links">
+            <li class="nav-item"><a href="manager.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+                    Manager</a></li>
+            <li class="nav-item"><a href="ventas.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i>
+                    Ventas</a></li>
+            <li class="nav-item"><a href="administracion.html" class="nav-link"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> Administración</a></li>
+            <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="fa-solid fa-user-tag"></i>
+                    Clientes</a></li>
+        </ul>
+        <div class="project-selector">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">Nuestros Proyectos</h4>
+            <div class="project-card" onclick="zoomToProject([-36.120, -71.776])">El Copihue</div>
+            <div class="project-card" onclick="zoomToProject([-36.385, -71.953])">Las Brisas</div>
+            <div class="project-card" onclick="zoomToProject([-36.468, -71.842])">Los Encinos</div>
+            <div class="project-card" onclick="zoomToProject([-36.478, -71.838])">Los Naranjos</div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Inicializar Mapa
+        var map = L.map('map', { zoomControl: false }).setView([-36.3, -71.9], 9);
+        L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], attribution: 'Google'
+        }).addTo(map);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        var projectIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: "<div class='marker-pin'></div>",
+            iconSize: [30, 42],
+            iconAnchor: [15, 42]
+        });
+
+        const PROJECT_LAYERS = {
+            'Hacienda El Copihue': [
+                { path: 'El Copihue/data/Disponibles_2.js', var: 'json_Disponibles_2', status: 'Disponible' },
+                { path: 'El Copihue/data/Vendidas_3.js', var: 'json_Vendidas_3', status: 'Vendida' },
+                { path: 'El Copihue/data/Reservadas_4.js', var: 'json_Reservadas_4', status: 'Reservada' }
+            ],
+            'Las Brisas': [
+                { path: 'Las Brisas/data/Disponibles_5.js', var: 'json_Disponibles_5', status: 'Disponible' },
+                { path: 'Las Brisas/data/Vendidas_4.js', var: 'json_Vendidas_4', status: 'Vendida' },
+                { path: 'Las Brisas/data/Reservadas_6.js', var: 'json_Reservadas_6', status: 'Reservada' }
+            ],
+            'Hacienda Los Encinos': [
+                { path: 'Los Encinos/data/Disponibles_4.js', var: 'json_Disponibles_4', status: 'Disponible' },
+                { path: 'Los Encinos/data/Vendidas_3.js', var: 'json_Vendidas_3', status: 'Vendida' },
+                { path: 'Los Encinos/data/Reservadas_5.js', var: 'json_Reservadas_5', status: 'Reservada' }
+            ],
+            'Los Naranjos': [
+                { path: 'Los Naranjos/data/Disponibles_3.js', var: 'json_Disponibles_3', status: 'Disponible' },
+                { path: 'Los Naranjos/data/Vendidas_2.js', var: 'json_Vendidas_2', status: 'Vendida' },
+                { path: 'Los Naranjos/data/Reservadas_4.js', var: 'json_Reservadas_4', status: 'Reservada' }
+            ]
+        };
+
+        const projects = [
+            {
+                name: "Hacienda El Copihue",
+                subtitle: "Camino Copihue / El Ajial • A 3,5 km de Parral",
+                price: "Desde $33.000.000", sold: "51% vendido", region: "Maule",
+                desc: "Parcelas de 5.000 m2 con portón y caminos iluminados.",
+                pos: [-36.120, -71.776], path: "El Copihue/index.html"
+            },
+            {
+                name: "Las Brisas",
+                subtitle: "Camino a Trapiche • A 4,5 km de San Carlos",
+                price: "Desde $18.000.000", sold: "36% vendido", region: "Ñuble",
+                desc: "Parcelas a 8 minutos de San Carlos con WiFi.",
+                pos: [-36.385, -71.953], path: "Las Brisas/index.html"
+            },
+            {
+                name: "Hacienda Los Encinos",
+                subtitle: "Camino a Nahueltoro • A 12 km de San Carlos",
+                price: "Desde $29.000.000", sold: "86% vendido", region: "Ñuble",
+                desc: "Parcelas a 10 min de San Carlos con tendido eléctrico.",
+                pos: [-36.468, -71.842], path: "Los Encinos/index.html"
+            },
+            {
+                name: "Los Naranjos",
+                subtitle: "Nahueltoro • A 12 km de San Carlos",
+                price: "Desde $18.000.000", sold: "77% vendido", region: "Ñuble",
+                desc: "Parcelas de agrado con acceso controlado.",
+                pos: [-36.478, -71.838], path: "Los Naranjos/index.html"
+            }
+        ];
+
+        var polygonLayerGroup = L.layerGroup().addTo(map);
+
+        function loadLayerOffline(path, varName) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = path; script.async = true;
+                script.onload = () => {
+                    const data = window[varName];
+                    if (data) resolve(data);
+                    else reject(new Error("Variable no encontrada"));
+                    document.head.removeChild(script);
+                };
+                script.onerror = () => reject(new Error("Error en " + path));
+                document.head.appendChild(script);
+            });
+        }
+
+        async function loadAll() {
+            for (const [projName, layers] of Object.entries(PROJECT_LAYERS)) {
+                for (const l of layers) {
+                    try {
+                        const data = await loadLayerOffline(l.path, l.var);
+                        L.geoJSON(data, {
+                            style: (f) => ({ fillColor: (l.status === 'Vendida' ? '#e74c3c' : l.status === 'Reservada' ? '#f1c40f' : '#2ecc71'), weight: 1, color: 'white', fillOpacity: 0.4 }),
+                            onEachFeature: (f, layer) => {
+                                const lote = f.properties.Lote || f.properties.name || f.properties.fid || '';
+                                if (lote) {
+                                    layer.bindTooltip(lote.toString(), {
+                                        permanent: true,
+                                        direction: 'center',
+                                        className: 'lot-label'
+                                    });
+                                }
+                                layer.bindPopup(`<b>${projName}</b><br>Lote: ${lote || 'S/N'}<br>Estado: ${l.status}`);
+                            }
+                        }).addTo(polygonLayerGroup);
+                    } catch (e) { }
+                }
+            }
+
+            projects.forEach(p => {
+                L.marker(p.pos, { icon: projectIcon }).addTo(map)
+                    .bindPopup(`<div class="popup-content"><h3>${p.name}</h3><p>${p.subtitle}</p><b>${p.price}</b><br><button onclick="window.location.href='${p.path}'">Explorar</button></div>`);
+            });
+        }
+
+        loadAll();
+
+        function updateLabels() {
+            if (map.getZoom() >= 15) {
+                document.getElementById('map').classList.add('show-labels');
+            } else {
+                document.getElementById('map').classList.remove('show-labels');
+            }
+        }
+
+        map.on('zoomend', updateLabels);
+        updateLabels();
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function zoomToProject(pos) {
+            map.flyTo(pos, 16, { duration: 2 });
+        }
+    </script>
+</body>
+
+</html>

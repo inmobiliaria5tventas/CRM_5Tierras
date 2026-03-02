@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5TIERRAS - Encuentra tu Parcela</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        body {
+            overflow-y: auto;
+            padding-bottom: 50px;
+        }
+
+        .hero {
+            height: 50vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), var(--dark)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 8vw, 64px);
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .catalog {
+            max-width: 1300px;
+            margin: -60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 0 25px;
+        }
+
+        .project-item {
+            background: var(--glass);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-item:hover {
+            transform: translateY(-12px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-img {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .project-img .status-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .project-info {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-tag {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            width: 100%;
+            margin-top: 20px;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-action:hover {
+            filter: brightness(1.2);
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 40vh;
+            }
+
+            .catalog {
+                margin-top: -30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <a href="index.html" class="back-btn" style="position: absolute; top: 30px; left: 30px;"><i
+                class="fa-solid fa-arrow-left"></i> Volver al Mapa</a>
+        <h1>5TIERRAS</h1>
+        <p style="font-size: 18px; opacity: 0.9; max-width: 600px;">Parcelas de agrado con alma de campo y conectividad
+            urbana.</p>
+    </div>
+
+    <div class="catalog">
+        <!-- El Copihue -->
+        <div class="project-item">
+            <div class="project-img"
+                style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80');">
+                <span class="status-tag">51% VENDIDO</span>
+            </div>
+            <div class="project-info">
+                <div class="price-tag">Desde $33,000,000</div>
+                <h2 style="margin-bottom: 10px;">Hacienda El Copihue</h2>
+                <p style="opacity: 0.7; font-size: 13px; line-height: 1.6;">A solo 3.5 km de Parral. Conexión eléctrica
+                    soterrada y caminos estabilizados.</p>
+                <button class="btn-action" onclick="location.href='ventas.html'">Explorar Lotes</button>
+            </div>
+        </div>
+
+        <!-- Las Brisas -->
+        <div class="project-item">
+            <div class="project-img"
+                style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80');">
+                <span class="status-tag">36% VENDIDO</span>
+            </div>
+            <div class="project-info">
+                <div class="price-tag">Desde $18,000,000</div>
+                <h2 style="margin-bottom: 10px;">Las Brisas de San Carlos</h2>
+                <p style="opacity: 0.7; font-size: 13px; line-height: 1.6;">Conectividad WiFi en zonas comunes y portón
+                    automático. Vida rural moderna.</p>
+                <button class="btn-action" onclick="location.href='ventas.html'">Ver Disponibilidad</button>
+            </div>
+        </div>
+
+        <!-- Los Encinos -->
+        <div class="project-item">
+            <div class="project-img"
+                style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80');">
+                <span class="status-tag">86% VENDIDO</span>
+            </div>
+            <div class="project-info">
+                <div class="price-tag">Desde $29,000,000</div>
+                <h2 style="margin-bottom: 10px;">Hacienda Los Encinos</h2>
+                <p style="opacity: 0.7; font-size: 13px; line-height: 1.6;">Bosque nativo y plusvalía asegurada. A 10
+                    minutos de la ciudad.</p>
+                <button class="btn-action" onclick="location.href='ventas.html'">Últimas Unidades</button>
+            </div>
+        </div>
+
+        <!-- Los Naranjos -->
+        <div class="project-item">
+            <div class="project-img"
+                style="background-image: url('https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&w=800&q=80');">
+                <span class="status-tag">77% VENDIDO</span>
+            </div>
+            <div class="project-info">
+                <div class="price-tag">Desde $18,000,000</div>
+                <h2 style="margin-bottom: 10px;">Los Naranjos</h2>
+                <p style="opacity: 0.7; font-size: 13px; line-height: 1.6;">Parcelas de agrado camino a Nahueltoro.
+                    Entorno tranquilo y seguro.</p>
+                <button class="btn-action" onclick="location.href='ventas.html'">Más Detalles</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
